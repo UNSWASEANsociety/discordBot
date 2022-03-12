@@ -1,6 +1,5 @@
 import asyncio
 import os
-from urllib import response
 import discord
 import random
 import json
@@ -27,19 +26,19 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if not message.content.startswith('*'):
+    if not message.content.startswith('$'):
         return
 
     command = message.content.split(' ')
 
-    if command[0] == '*help':
+    if command[0] == '$help':
         response = '''
         **Command list:**
         ***help** - Show list of commands
         ***quote [thing]** - Get a random quote from list
         '''
 
-    elif command[0] == '*quote':
+    elif command[0] == '$quote':
         quotes = open('wordbank/ansafone.txt').read().splitlines()
         response = random.choice(quotes)
 
