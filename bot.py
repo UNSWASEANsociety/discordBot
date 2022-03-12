@@ -4,6 +4,7 @@ import discord
 import random
 import json
 import dotenv
+import uwuify
 
 from src.emojify import emojify
 from src.sheets import read_sheet
@@ -46,6 +47,10 @@ async def on_message(message):
     elif command[0] == '$emojify':
         message = await message.channel.fetch_message(message.reference.message_id)
         response = emojify(message.content)
+
+    elif command[0] == '$uwu':
+        message = await message.channel.fetch_message(message.reference.message_id)
+        response = uwuify.uwu(message.content, flags=uwuify.SMILEY)
 
     else:
         response = 'Command not found'
