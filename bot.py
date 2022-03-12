@@ -5,6 +5,7 @@ import random
 import json
 import dotenv
 
+from src.emojify import emojify
 from src.sheets import read_sheet
 
 client = discord.Client()
@@ -26,9 +27,6 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if not message.content.startswith('$'):
-        return
-
     command = message.content.split(' ')
 
     if command[0] == '$help':
@@ -42,6 +40,10 @@ async def on_message(message):
         quotes = open('wordbank/ansafone.txt').read().splitlines()
         response = random.choice(quotes)
 
+    elif command[0] == '$emojify':
+        message = await message.channel.fetch_message(message.reference.message_id)
+        response = emojify(message.content)
+
     else:
         response = 'Command not found'
 
@@ -53,6 +55,7 @@ async def send_quotes():
     # assuming the bot is connected to only one guild
      guild = client.guilds[0]
      channel = random.choice(guild.text_channels)
+
 
 async def love_letters(channel_id):
     await client.wait_until_ready()
