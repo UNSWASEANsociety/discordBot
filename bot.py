@@ -40,9 +40,7 @@ async def on_message(message):
         '''
 
     elif command[0] == '*quote':
-        if command[1] == 'b99':
-            quotes = open('brooklyn_99_quotes.txt').read().splitlines()
-
+        quotes = open('wordbank/ansafone.txt').read().splitlines()
         response = random.choice(quotes)
 
     else:
@@ -66,7 +64,7 @@ async def love_letters(channel_id):
     while not client.is_closed():
         rants = read_sheet()
         if len(rants) > n:
-            msg = f'**Rant #{n}** *by {rants[n][1]}*\n\n{rants[n][2]}'
+            msg = f'**Rant #{n}** by *{rants[n][1]}*\n{rants[n][2]}'
             await channel.send(msg)
             n += 1
             dotenv.set_key('.env', 'RANT_NUM', str(n))
