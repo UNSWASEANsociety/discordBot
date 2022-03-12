@@ -27,6 +27,9 @@ async def on_message(message):
     if message.author == client.user:
         return
 
+    if not message.content.startswith('$'):
+        return
+
     command = message.content.split(' ')
 
     if command[0] == '$help':
@@ -48,7 +51,6 @@ async def on_message(message):
         response = 'Command not found'
 
     await message.channel.send(response)
-    await message.delete()
 
 
 async def send_quotes():
