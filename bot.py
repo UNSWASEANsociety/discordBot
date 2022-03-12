@@ -71,7 +71,7 @@ async def love_letters(channel_id):
             n += 1
             dotenv.set_key('.env', 'RANT_NUM', str(n))
 
-        await asyncio.sleep(60)
+        await asyncio.sleep(600)
 
 
 if __name__ == '__main__':
