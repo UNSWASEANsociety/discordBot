@@ -10,4 +10,4 @@ def emojify(text, density=50):
         'shouldFilterEmojis' : False
         }
     resp = requests.post(URL, json=payload)
-    return json.loads(resp.text)['result'].replace(u'\u200b', ' ')
+    return json.loads(resp.text)['result'].replace(u'\u200b', '')
