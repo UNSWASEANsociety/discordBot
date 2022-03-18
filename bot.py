@@ -1,11 +1,11 @@
 import asyncio
+from ctypes import cast
 import os
 import discord
 import random
 import json
 import uwuify
-import dotenv
-from boto.s3.connection import S3Connection
+import decouple
 
 from src.emojify import emojify
 from src.sheets import read_sheet
@@ -69,10 +69,8 @@ async def love_letters(channel_id):
     await client.wait_until_ready()
 
     channel = client.get_channel(id=int(channel_id))
-    with open('data/state.json', 'r') as f:
-        state = json.load(f)
+    n = decouple.config('RANT_NUM', cast=int)
 
-    n = state['RANT_NUM']
     while not client.is_closed():
         rants = read_sheet()
         if len(rants) > n:
@@ -80,23 +78,15 @@ async def love_letters(channel_id):
             await channel.send(msg)
 
             n += 1
-            state['RANT_NUM'] = n
-
-            with open('data/state.json', 'w') as f:
-                json.dump(state, f)
+            os.environ["RANT_NUM"] = str(n)
+            # set var
 
         await asyncio.sleep(600)
 
 
 if __name__ == '__main__':
-    if os.path.exists('.env'):
-        dotenv.load_dotenv()
-        token = os.getenv('DISCORD_TOKEN')
-        channel_id = os.getenv('MAIN_CHANNEL')
-    else:
-        token = os.environ.get('DISCORD_TOKEN')
-        channel_id = os.environ.get('MAIN_CHANNEL')
+    token = decouple.config('DISCORD_TOKEN')
+    channel_id = decouple.config('MAIN_CHANNEL')
         
-    
     client.loop.create_task(love_letters(channel_id))
     client.run(token)
