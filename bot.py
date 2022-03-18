@@ -1,10 +1,11 @@
 import asyncio
+from ctypes import cast
 import os
 import discord
 import random
 import json
-import dotenv
 import uwuify
+import decouple
 
 from src.emojify import emojify
 from src.sheets import read_sheet
@@ -68,23 +69,24 @@ async def love_letters(channel_id):
     await client.wait_until_ready()
 
     channel = client.get_channel(id=int(channel_id))
-    n = int(os.getenv('RANT_NUM'))
+    n = decouple.config('RANT_NUM', cast=int)
 
     while not client.is_closed():
         rants = read_sheet()
         if len(rants) > n:
             msg = f'**Rant #{n}** by {rants[n][1]}\n*{rants[n][2]}*\n'
             await channel.send(msg)
+
             n += 1
-            dotenv.set_key('.env', 'RANT_NUM', str(n))
+            os.environ["RANT_NUM"] = str(n)
+            # set var
 
         await asyncio.sleep(600)
 
 
 if __name__ == '__main__':
-    dotenv.load_dotenv()
-    TOKEN = os.getenv('DISCORD_TOKEN')
-    channel_id = os.getenv('MAIN_CHANNEL')
-    
+    token = decouple.config('DISCORD_TOKEN')
+    channel_id = decouple.config('MAIN_CHANNEL')
+        
     client.loop.create_task(love_letters(channel_id))
-    client.run(TOKEN)
+    client.run(token)
