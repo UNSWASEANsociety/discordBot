@@ -69,17 +69,14 @@ async def love_letters(channel_id):
     await client.wait_until_ready()
 
     channel = client.get_channel(id=int(channel_id))
-    n = decouple.config('RANT_NUM', cast=int)
+    n = len(read_sheet())
 
     while not client.is_closed():
         rants = read_sheet()
         if len(rants) > n:
             msg = f'**Rant #{n}** by {rants[n][1]}\n*{rants[n][2]}*\n'
             await channel.send(msg)
-
             n += 1
-            os.environ["RANT_NUM"] = str(n)
-            # set var
 
         await asyncio.sleep(600)
 
